@@ -105,7 +105,6 @@
 			children = (
 				B0EB83431BC6AF0A0023398A /* Other */,
 				B0EB83421BC6AEE40023398A /* Resources */,
-				B0EB830E1BC6AACA0023398A /* AppDelegate.swift */,
 				B0EB834C1BC6D3F40023398A /* RandomUser.swift */,
 				B0EB834E1BC6D4D30023398A /* RandomUsers.swift */,
 				B0EB83101BC6AACA0023398A /* ListViewController.swift */,
@@ -146,6 +145,7 @@
 			children = (
 				B0EB83171BC6AACA0023398A /* LaunchScreen.storyboard */,
 				B0EB831A1BC6AACA0023398A /* Info.plist */,
+				B0EB830E1BC6AACA0023398A /* AppDelegate.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";

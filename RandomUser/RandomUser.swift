@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Contacts
 
 class RandomUser {
   var lastName = ""
@@ -29,4 +30,39 @@ class RandomUser {
 
 func < (lhs: RandomUser, rhs: RandomUser) -> Bool {
   return lhs.lastName.localizedStandardCompare(rhs.lastName) == .OrderedAscending
+}
+
+extension RandomUser {
+  
+  var contactValue : CNContact {
+
+    let contact = CNMutableContact()
+    
+    contact.givenName = firstName.capitalizedString
+    contact.familyName = lastName.capitalizedString
+    contact.phoneNumbers = [CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: phone)),
+      CNLabeledValue(label: CNLabelPhoneNumberMobile, value: CNPhoneNumber(stringValue: cell))]
+      
+    contact.emailAddresses = [CNLabeledValue(label: CNLabelHome, value: email)]
+      
+    let address = CNMutablePostalAddress ()
+      
+    address.street = street
+    address.city  = city
+    address.state = state
+    address.postalCode = zip
+      
+    contact.postalAddresses = [CNLabeledValue(label: CNLabelHome, value: address)]
+      
+    //  CNPostalAddress
+  
+//    if let profilePicture = profilePicture {
+//      let imageData = UIImageJPEGRepresentation(profilePicture, 1)
+//      contact.imageData = imageData
+//    }
+//  
+    return contact.copy() as! CNContact
+  }
+  
+
 }

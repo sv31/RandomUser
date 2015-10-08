@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Contacts
 
 class ListViewController: UIViewController {
   
@@ -60,13 +61,14 @@ class ListViewController: UIViewController {
   }
   
   func saveButtonClicked () {
-    
+    saveUserToContacts(randomUsers.list[0])
   }
   
   func refreshButtonClicked () {
     randomUsers.loadUsers(numberOfUsersToLoad)
     image = nil
   }
+  
   
 }
 
@@ -85,6 +87,61 @@ extension ListViewController :  UITableViewDelegate {
  
 }
 
+ // MARK: - Contacts
+
+extension ListViewController {
+  func presentPermissionErrorAlert() {
+    dispatch_async(dispatch_get_main_queue()) {
+      let alert = UIAlertController(title: "Could Not Save Contact", message: "How am I supposed to add the contact if you didn't give me permission?", preferredStyle: .Alert)
+      let openSettingsAction = UIAlertAction(title: "Settings", style: .Default, handler: { _ in
+        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+      })
+      let dismissAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+      alert.addAction(openSettingsAction)
+      alert.addAction(dismissAction)
+      self.presentViewController(alert, animated: true, completion: nil)
+    }
+  }
+  
+  func saveUserToContacts(randomUser: RandomUser) {
+    
+    let contactFormatter = CNContactFormatter()
+    let contactName = contactFormatter.stringFromContact(randomUser.contactValue)!
+    let predicateForMatchingName = CNContact.predicateForContactsMatchingName(contactName)
+    let matchingContacts = try! CNContactStore().unifiedContactsMatchingPredicate(predicateForMatchingName, keysToFetch: [])
+    guard matchingContacts.isEmpty else {
+      dispatch_async(dispatch_get_main_queue()){
+        let alert = UIAlertController(title:"\(randomUser.firstName.capitalizedString) \(randomUser.lastName.capitalizedString)  Already Exists", message:nil, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+      }
+      return
+    }
+    
+    let contact = randomUser.contactValue.mutableCopy() as! CNMutableContact
+    let saveRequest = CNSaveRequest()
+    saveRequest.addContact(contact, toContainerWithIdentifier: nil)
+    do {
+      let contactStore = CNContactStore()
+      try contactStore.executeSaveRequest(saveRequest)
+      // Show success alert
+      dispatch_async(dispatch_get_main_queue()){
+        let successAlert = UIAlertController(title: "Contact Saved", message: nil, preferredStyle: .Alert)
+        successAlert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+        self.presentViewController(successAlert, animated: true, completion: nil)
+      }
+    } catch {
+      // Show failure alert
+      dispatch_async(dispatch_get_main_queue()){
+        let failureAlert = UIAlertController(title: "Could Not Save Contact", message: "An unknown error occurred", preferredStyle: .Alert)
+        failureAlert.addAction(UIAlertAction(title:"OK", style: .Cancel, handler: nil))
+        self.presentViewController(failureAlert, animated: true, completion: nil)
+      }
+    }
+    
+  }
+}
+
 extension ListViewController : UITableViewDataSource {
   
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,7 +156,7 @@ extension ListViewController : UITableViewDataSource {
       cell.imageView?.image = image
       image = nil
     } else {
-      cell.imageView?.image = UIImage(named: "Placeholder")
+   //   cell.imageView?.image = UIImage(named: "Placeholder")
       if let url = NSURL(string: randomUsers.list[indexPath.row].picture) {
        cell.imageView?.loadImageWithURL(url)
       }
