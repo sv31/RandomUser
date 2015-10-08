@@ -1,8 +1,8 @@
 //
 //  UIImageView+DownloadImage.swift
-//  StoreSearch
+//  RandomUser
 //
-//  Created by SV on 2015-10-06.
+//  Created by SV on 2015-10-08.
 //  Copyright © 2015 WHMG Inc. All rights reserved.
 //
 

@@ -23,6 +23,8 @@ class RandomUser {
   
   var picture = ""
   
+  var isSelected = false
+  
 }
 
 func < (lhs: RandomUser, rhs: RandomUser) -> Bool {

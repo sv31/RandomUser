@@ -10,6 +10,7 @@ import Foundation
 
 class RandomUsers {
   
+ 
   
   var list: [RandomUser] = []
 
@@ -25,7 +26,7 @@ class RandomUsers {
 
   private func getInfoFromWeb (howMany: Int) {
 
-    let url = NSURL(string: "https://randomuser.me/api/?results=10")
+    let url = NSURL(string: String(format: "https://randomuser.me/api/?results=%d", howMany))
     let config = NSURLSessionConfiguration.ephemeralSessionConfiguration()
     let session = NSURLSession(configuration: config)
 
@@ -39,17 +40,13 @@ class RandomUsers {
               dispatch_async(dispatch_get_main_queue()){
                  self.sendSuccessNotification()
               }
-          } else {
-            print ("something wrong")
-            self.sendErrorNotification()
+              return
           }
         }
-        else {
-          print ("error: \(error)")
+        dispatch_async(dispatch_get_main_queue()){
           self.sendErrorNotification()
         }
      }
-    
     dataTask.resume()
   }
 
@@ -122,7 +119,7 @@ class RandomUsers {
   }
   
   private func sendErrorNotification () {
-    let notification = NSNotification(name: "RandomeUsersError", object: nil)
+    let notification = NSNotification(name: "RandomeUsersReloadError", object: nil)
     NSNotificationCenter.defaultCenter().postNotification(notification)
   }
 
