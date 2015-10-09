@@ -11,6 +11,7 @@ import Contacts
 import UIKit
 
 class RandomUser {
+  
   var lastName = ""
   var firstName = ""
   
@@ -57,38 +58,9 @@ extension RandomUser {
     address.postalCode = zip
       
     contact.postalAddresses = [CNLabeledValue(label: CNLabelHome, value: address)]
-      
-    //  CNPostalAddress
-  
-//    if let profilePicture = profilePicture {
-//      let imageData = UIImageJPEGRepresentation(profilePicture, 1)
-//      contact.imageData = imageData
-//    }
-//  
+    
     return contact.copy() as! CNContact
   }
 }
-  
-  extension RandomUser {
-    
-    func getImage () {
-      print("getImage")
-      let session = NSURLSession.sharedSession()
-      print ("\(picture)")
-      if let url = NSURL(string: picture) {
-        let downloadTask = session.downloadTaskWithURL(url)
-        { url, response,  error in
-            if error == nil, let url = url,
-              data = NSData(contentsOfURL: url),
-              image = UIImage(data: data) {
-                dispatch_sync(dispatch_get_main_queue()) {
-                 self.image = image
-                }
-             }
-        }
-        downloadTask.resume()
-      }
-    }
-    
-}
+
   

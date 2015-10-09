@@ -10,8 +10,6 @@ import Foundation
 
 class RandomUsers {
   
- 
-  
   var list: [RandomUser] = []
 
   func loadUsers (howMany: Int, reload: Bool = true) {

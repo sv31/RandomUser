@@ -15,7 +15,6 @@ class ListViewController: UIViewController {
   var image: UIImage?
   
   var numberOfUsersToLoad = 10
-  var count = 0
   
   @IBOutlet weak var tableView: UITableView!
 
@@ -62,16 +61,13 @@ class ListViewController: UIViewController {
   }
   
   func saveButtonClicked () {
-    saveAll(randomUsers)
-    tableView.reloadData()
-  //  getImageAndSave(randomUsers.list[0])
+    prepareToSave(randomUsers)
   }
   
   func refreshButtonClicked () {
     randomUsers.loadUsers(numberOfUsersToLoad)
     image = nil
   }
-  
   
 }
 
@@ -98,17 +94,33 @@ extension ListViewController :  UITableViewDelegate {
 
 extension ListViewController {
   
-  
-  func saveAll(randomUsers: RandomUsers) {
+  func prepareToSave (randomUsers: RandomUsers) {
     
-    count = 0
-    
-    for randomUser in randomUsers.list {
-      if randomUser.isSelected {
-        getImageAndSave(randomUser)
-        randomUser.isSelected = false
-      }
+    let isAnySelected = randomUsers.list.reduce(false) { (flag, user) -> Bool in
+      return flag || user.isSelected
     }
+    
+    guard isAnySelected else {
+      
+      let alert = UIAlertController(title:"Nothing to Save", message:"Please select at least one user from the list", preferredStyle: .Alert)
+      alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+      self.presentViewController(alert, animated: true, completion: nil)
+      return
+    }
+    
+    let alert = UIAlertController(title:"Are Sure?", message:"You are about to add selected users to your Contacts", preferredStyle: .Alert)
+    alert.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler:{
+      _ in
+      for randomUser in randomUsers.list {
+        if randomUser.isSelected {
+          self.getImageAndSave(randomUser)
+          randomUser.isSelected = false
+        }
+      }
+      self.tableView.reloadData()
+    }))
+    self.presentViewController(alert, animated: true, completion: nil)
     
   }
   
@@ -138,11 +150,11 @@ extension ListViewController {
    func presentPermissionErrorAlert() {
     dispatch_async(dispatch_get_main_queue()) {
       let alert = UIAlertController(title: "Could Not Save Contact", message: "You need to give me permission to add the contact", preferredStyle: .Alert)
-      let openSettingsAction = UIAlertAction(title: "Settings", style: .Default, handler: { _ in
-        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
-      })
+//      let openSettingsAction = UIAlertAction(title: "Settings", style: .Default, handler: { _ in
+//        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+//      })
       let dismissAction = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-      alert.addAction(openSettingsAction)
+   //   alert.addAction(openSettingsAction)
       alert.addAction(dismissAction)
       self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -153,9 +165,23 @@ extension ListViewController {
     let contactFormatter = CNContactFormatter()
     let contactName = contactFormatter.stringFromContact(randomUser.contactValue)!
     let predicateForMatchingName = CNContact.predicateForContactsMatchingName(contactName)
-    let matchingContacts = try! CNContactStore().unifiedContactsMatchingPredicate(predicateForMatchingName, keysToFetch: [])
-    guard matchingContacts.isEmpty else {
-     return
+    
+    let contactStore = CNContactStore()
+    
+    do {
+      let matchingContacts = try contactStore.unifiedContactsMatchingPredicate(predicateForMatchingName, keysToFetch: [])
+      
+      guard matchingContacts.isEmpty else {
+       return
+      }
+    }
+    catch {
+      contactStore.requestAccessForEntityType (CNEntityType.Contacts, completionHandler: { userGrantedAccess, _ in
+        guard userGrantedAccess else {
+          self.presentPermissionErrorAlert()
+          return
+        }
+      })
     }
     
     let contact = randomUser.contactValue.mutableCopy() as! CNMutableContact
@@ -171,7 +197,6 @@ extension ListViewController {
       let contactStore = CNContactStore()
       try contactStore.executeSaveRequest(saveRequest)
       dispatch_async(dispatch_get_main_queue()){
-        self.count++
         randomUser.isSaved = true
         randomUser.isSelected = false
         self.tableView.reloadData()
@@ -182,6 +207,8 @@ extension ListViewController {
     
   }
 }
+
+ // MARK: - TableView Delegates
 
 extension ListViewController : UITableViewDataSource {
   
