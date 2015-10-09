@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B03B69041BC7033A0021EE21 /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03B69031BC7033A0021EE21 /* UIImageView+DownloadImage.swift */; settings = {ASSET_TAGS = (); }; };
+		B03B69041BC7033A0021EE21 /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03B69031BC7033A0021EE21 /* UIImageView+DownloadImage.swift */; };
 		B0EB830F1BC6AACA0023398A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB830E1BC6AACA0023398A /* AppDelegate.swift */; };
 		B0EB83111BC6AACA0023398A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB83101BC6AACA0023398A /* ListViewController.swift */; };
 		B0EB83141BC6AACA0023398A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0EB83121BC6AACA0023398A /* Main.storyboard */; };
@@ -15,8 +15,8 @@
 		B0EB83191BC6AACA0023398A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0EB83171BC6AACA0023398A /* LaunchScreen.storyboard */; };
 		B0EB83241BC6AACA0023398A /* RandomUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB83231BC6AACA0023398A /* RandomUserTests.swift */; };
 		B0EB832F1BC6AACA0023398A /* RandomUserUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB832E1BC6AACA0023398A /* RandomUserUITests.swift */; };
-		B0EB834D1BC6D3F40023398A /* RandomUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB834C1BC6D3F40023398A /* RandomUser.swift */; settings = {ASSET_TAGS = (); }; };
-		B0EB834F1BC6D4D30023398A /* RandomUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB834E1BC6D4D30023398A /* RandomUsers.swift */; settings = {ASSET_TAGS = (); }; };
+		B0EB834D1BC6D3F40023398A /* RandomUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB834C1BC6D3F40023398A /* RandomUser.swift */; };
+		B0EB834F1BC6D4D30023398A /* RandomUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB834E1BC6D4D30023398A /* RandomUsers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +212,7 @@
 		B0EB83031BC6AACA0023398A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "WHMG Inc";
 				TargetAttributes = {

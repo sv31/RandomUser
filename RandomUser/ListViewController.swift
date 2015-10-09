@@ -15,6 +15,7 @@ class ListViewController: UIViewController {
   var image: UIImage?
   
   var numberOfUsersToLoad = 10
+  var count = 0
   
   @IBOutlet weak var tableView: UITableView!
 
@@ -61,7 +62,9 @@ class ListViewController: UIViewController {
   }
   
   func saveButtonClicked () {
-    saveUserToContacts(randomUsers.list[0])
+    saveAll(randomUsers)
+    tableView.reloadData()
+  //  getImageAndSave(randomUsers.list[0])
   }
   
   func refreshButtonClicked () {
@@ -76,6 +79,10 @@ extension ListViewController :  UITableViewDelegate {
   
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    guard !randomUsers.list[indexPath.row].isSaved else {
+      return
+    }
+    
     if (randomUsers.list[indexPath.row].isSelected) {
       randomUsers.list[indexPath.row].isSelected = false
     } else {
@@ -90,9 +97,47 @@ extension ListViewController :  UITableViewDelegate {
  // MARK: - Contacts
 
 extension ListViewController {
-  func presentPermissionErrorAlert() {
+  
+  
+  func saveAll(randomUsers: RandomUsers) {
+    
+    count = 0
+    
+    for randomUser in randomUsers.list {
+      if randomUser.isSelected {
+        getImageAndSave(randomUser)
+        randomUser.isSelected = false
+      }
+    }
+    
+  }
+  
+  func getImageAndSave (randomUser: RandomUser) {
+    let session = NSURLSession.sharedSession()
+    if let url = NSURL(string: randomUser.picture) {
+      let downloadTask = session.downloadTaskWithURL(url)
+        { url, response,  error in
+          if error == nil, let url = url,
+            data = NSData(contentsOfURL: url),
+            image = UIImage(data: data) {
+            dispatch_sync(dispatch_get_main_queue()) {
+             self.saveUserToContacts(randomUser, image: image)
+            }
+          } else {
+            dispatch_sync(dispatch_get_main_queue()) {
+              self.saveUserToContacts(randomUser, image: nil)
+            }
+          }
+         }
+      downloadTask.resume()
+      return
+    }
+    self.saveUserToContacts(randomUser, image: nil)
+  }
+  
+   func presentPermissionErrorAlert() {
     dispatch_async(dispatch_get_main_queue()) {
-      let alert = UIAlertController(title: "Could Not Save Contact", message: "How am I supposed to add the contact if you didn't give me permission?", preferredStyle: .Alert)
+      let alert = UIAlertController(title: "Could Not Save Contact", message: "You need to give me permission to add the contact", preferredStyle: .Alert)
       let openSettingsAction = UIAlertAction(title: "Settings", style: .Default, handler: { _ in
         UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
       })
@@ -103,41 +148,37 @@ extension ListViewController {
     }
   }
   
-  func saveUserToContacts(randomUser: RandomUser) {
+  func saveUserToContacts(randomUser: RandomUser, image: UIImage?) {
     
     let contactFormatter = CNContactFormatter()
     let contactName = contactFormatter.stringFromContact(randomUser.contactValue)!
     let predicateForMatchingName = CNContact.predicateForContactsMatchingName(contactName)
     let matchingContacts = try! CNContactStore().unifiedContactsMatchingPredicate(predicateForMatchingName, keysToFetch: [])
     guard matchingContacts.isEmpty else {
-      dispatch_async(dispatch_get_main_queue()){
-        let alert = UIAlertController(title:"\(randomUser.firstName.capitalizedString) \(randomUser.lastName.capitalizedString)  Already Exists", message:nil, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-      }
-      return
+     return
     }
     
     let contact = randomUser.contactValue.mutableCopy() as! CNMutableContact
+
+    if let image = image {
+      let imageData = UIImageJPEGRepresentation(image, 1)
+      contact.imageData = imageData
+    }
+    
     let saveRequest = CNSaveRequest()
     saveRequest.addContact(contact, toContainerWithIdentifier: nil)
     do {
       let contactStore = CNContactStore()
       try contactStore.executeSaveRequest(saveRequest)
-      // Show success alert
       dispatch_async(dispatch_get_main_queue()){
-        let successAlert = UIAlertController(title: "Contact Saved", message: nil, preferredStyle: .Alert)
-        successAlert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-        self.presentViewController(successAlert, animated: true, completion: nil)
+        self.count++
+        randomUser.isSaved = true
+        randomUser.isSelected = false
+        self.tableView.reloadData()
       }
-    } catch {
-      // Show failure alert
-      dispatch_async(dispatch_get_main_queue()){
-        let failureAlert = UIAlertController(title: "Could Not Save Contact", message: "An unknown error occurred", preferredStyle: .Alert)
-        failureAlert.addAction(UIAlertAction(title:"OK", style: .Cancel, handler: nil))
-        self.presentViewController(failureAlert, animated: true, completion: nil)
-      }
-    }
+  } catch {
+    print("cannot save...")
+  }
     
   }
 }
@@ -170,7 +211,10 @@ extension ListViewController : UITableViewDataSource {
   }
   
   func ComposeTitle(randomUser: RandomUser) -> String {
-    let text = randomUser.firstName.capitalizedString + " " + randomUser.lastName.capitalizedString
+    var text = randomUser.firstName.capitalizedString + " " + randomUser.lastName.capitalizedString
+    if randomUser.isSaved {
+      text = text + " (Saved) "
+    }
     return text
   }
   

@@ -8,6 +8,7 @@
 
 import Foundation
 import Contacts
+import UIKit
 
 class RandomUser {
   var lastName = ""
@@ -25,6 +26,9 @@ class RandomUser {
   var picture = ""
   
   var isSelected = false
+  var isSaved = false
+  
+  var image: UIImage? = nil
   
 }
 
@@ -63,6 +67,28 @@ extension RandomUser {
 //  
     return contact.copy() as! CNContact
   }
-  
-
 }
+  
+  extension RandomUser {
+    
+    func getImage () {
+      print("getImage")
+      let session = NSURLSession.sharedSession()
+      print ("\(picture)")
+      if let url = NSURL(string: picture) {
+        let downloadTask = session.downloadTaskWithURL(url)
+        { url, response,  error in
+            if error == nil, let url = url,
+              data = NSData(contentsOfURL: url),
+              image = UIImage(data: data) {
+                dispatch_sync(dispatch_get_main_queue()) {
+                 self.image = image
+                }
+             }
+        }
+        downloadTask.resume()
+      }
+    }
+    
+}
+  
