@@ -28,9 +28,20 @@ class RandomUserUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testUserSelectedSaveDeclined () {
+      let app = XCUIApplication()
+      let listOfUsersTableTable = app.tables["List of Users Table"]
+      listOfUsersTableTable.staticTexts.elementBoundByIndex(0).tap()
+      app.navigationBars["RandomUser.ListView"].buttons["Save"].tap()
+      app.alerts["Are Sure?"].collectionViews.buttons["No"].tap()
     }
-    
+  
+    func testNoUserSelected () {
+      
+      let app = XCUIApplication()
+      app.navigationBars["RandomUser.ListView"].buttons["Save"].tap()
+      app.alerts["Nothing to Save"].collectionViews.buttons["OK"].tap()
+      
+    }
+  
 }

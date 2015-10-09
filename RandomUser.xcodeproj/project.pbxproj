@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B03B69041BC7033A0021EE21 /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03B69031BC7033A0021EE21 /* UIImageView+DownloadImage.swift */; };
+		B0DCC7A01BC81A3700C49E11 /* RandomUser.json in Resources */ = {isa = PBXBuildFile; fileRef = B0DCC79F1BC81A3700C49E11 /* RandomUser.json */; settings = {ASSET_TAGS = (); }; };
 		B0EB830F1BC6AACA0023398A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB830E1BC6AACA0023398A /* AppDelegate.swift */; };
 		B0EB83111BC6AACA0023398A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EB83101BC6AACA0023398A /* ListViewController.swift */; };
 		B0EB83141BC6AACA0023398A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0EB83121BC6AACA0023398A /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		B03B69031BC7033A0021EE21 /* UIImageView+DownloadImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadImage.swift"; sourceTree = "<group>"; };
+		B0DCC79F1BC81A3700C49E11 /* RandomUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RandomUser.json; sourceTree = "<group>"; };
 		B0EB830B1BC6AACA0023398A /* RandomUser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RandomUser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EB830E1BC6AACA0023398A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0EB83101BC6AACA0023398A /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		B0EB83221BC6AACA0023398A /* RandomUserTests */ = {
 			isa = PBXGroup;
 			children = (
+				B0DCC79F1BC81A3700C49E11 /* RandomUser.json */,
 				B0EB83231BC6AACA0023398A /* RandomUserTests.swift */,
 				B0EB83251BC6AACA0023398A /* Info.plist */,
 			);
@@ -264,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0DCC7A01BC81A3700C49E11 /* RandomUser.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -48,7 +48,7 @@ class RandomUsers {
     dataTask.resume()
   }
 
-  private func parseJSON (data: NSData) -> [String: AnyObject]? {
+  func parseJSON (data: NSData) -> [String: AnyObject]? {
     do {
       return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject]
     }
@@ -58,7 +58,7 @@ class RandomUsers {
     }
   }
 
-  private func parseDictionary (dictionary: [String:AnyObject]) {
+  func parseDictionary (dictionary: [String:AnyObject]) {
 
     guard let resultsJSON = dictionary["results"] as? [AnyObject] else {
       print ("Expected 'results' array")
@@ -98,7 +98,7 @@ class RandomUsers {
        randomUser.street = locationJSON["street"] as? String ?? ""
        randomUser.city = locationJSON["city"] as? String ?? ""
        randomUser.state = locationJSON["state"] as? String ?? ""
-       randomUser.zip = locationJSON["zip"] as? String ?? ""
+       randomUser.zip = locationJSON["zip"] as? Int ?? 0
       }
       
       if let pictureJSON = userJSON["picture"] as? [String:AnyObject] {

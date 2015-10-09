@@ -27,7 +27,7 @@ class ListViewController: UIViewController {
     
     self.navigationItem.setLeftBarButtonItem(createSaveButtonItem(), animated: true)
     self.navigationItem.setRightBarButtonItem(createRefreshButtonItem(), animated: true)
-
+    tableView.accessibilityIdentifier = "List of Users Table"
   }
 
   override func didReceiveMemoryWarning() {

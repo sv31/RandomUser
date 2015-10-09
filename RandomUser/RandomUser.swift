@@ -18,7 +18,7 @@ class RandomUser {
   var street = ""
   var city = ""
   var state = ""
-  var zip = ""
+  var zip = 0
   
   var email = ""
   var phone = ""
@@ -52,10 +52,10 @@ extension RandomUser {
       
     let address = CNMutablePostalAddress ()
       
-    address.street = street
-    address.city  = city
-    address.state = state
-    address.postalCode = zip
+    address.street = street.capitalizedString
+    address.city  = city.capitalizedString
+    address.state = state.capitalizedString
+    address.postalCode = "\(zip)"
       
     contact.postalAddresses = [CNLabeledValue(label: CNLabelHome, value: address)]
     
