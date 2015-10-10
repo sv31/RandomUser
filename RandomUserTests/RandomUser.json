@@ -1,0 +1,40 @@
+{
+    "results": [
+        {
+            "user": {
+                "gender": "female",
+                "name": {
+                    "title": "ms",
+                    "first": "shanice",
+                    "last": "van laarhoven"
+                },
+                "location": {
+                    "street": "6215 wittevrouwensingel",
+                    "city": "enkhuizen",
+                    "state": "noord-holland",
+                    "zip": 52033
+                },
+                "email": "shanice.van laarhoven@example.com",
+                "username": "bigmeercat460",
+                "password": "skyhawk",
+                "salt": "A9ZLnmpf",
+                "md5": "4492bdea14347a01aacb419280185348",
+                "sha1": "ece390738a929c40ff66518195001f365c722ef9",
+                "sha256": "d539d7615d9f66b716451308354719f18fcd67cc05fbc24d4e0055e3d05e6847",
+                "registered": 998111424,
+                "dob": 445701460,
+                "phone": "(957)-880-2386",
+                "cell": "(344)-071-7946",
+                "BSN": "36105881",
+                "picture": {
+                    "large": "https://randomuser.me/api/portraits/women/62.jpg",
+                    "medium": "https://randomuser.me/api/portraits/med/women/62.jpg",
+                    "thumbnail": "https://randomuser.me/api/portraits/thumb/women/62.jpg"
+                }
+            }
+        }
+    ],
+    "nationality": "NL",
+    "seed": "foobar",
+    "version": "0.7"
+}
